@@ -7,15 +7,10 @@ const nextConfig = {
   swcMinify: true,
   poweredByHeader: false,
   
-  // Enable experimental features for better performance
+  // Remove experimental.turbo for Vercel deployment
   experimental: {
     optimizeCss: true,
     optimizeServerReact: true,
-    turbo: {
-      rules: {
-        '*.svg': ['@svgr/webpack'],
-      },
-    },
     webpackBuildWorker: true,
   },
 
@@ -61,28 +56,6 @@ const nextConfig = {
             key: 'Referrer-Policy',
             value: 'strict-origin-when-cross-origin',
           },
-          {
-            key: 'Permissions-Policy',
-            value: 'camera=(), microphone=(), geolocation=()',
-          },
-        ],
-      },
-      {
-        source: '/_next/image/:path*',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
-          },
-        ],
-      },
-      {
-        source: '/fonts/:path*',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
-          },
         ],
       },
     ]
@@ -96,11 +69,6 @@ const nextConfig = {
         destination: '/',
         permanent: true,
       },
-      {
-        source: '/old-internships',
-        destination: '/internships',
-        permanent: true,
-      },
     ]
   },
 
@@ -110,17 +78,6 @@ const nextConfig = {
       test: /\.(glsl|vs|fs|vert|frag)$/,
       exclude: /node_modules/,
       use: ['raw-loader', 'glslify-loader'],
-    })
-
-    config.module.rules.push({
-      test: /\.(glb|gltf)$/,
-      use: {
-        loader: 'file-loader',
-        options: {
-          publicPath: '/_next/static/images',
-          outputPath: 'static/images/',
-        },
-      },
     })
 
     return config
@@ -153,17 +110,6 @@ const pwaConfig = withPWA({
         expiration: {
           maxEntries: 4,
           maxAgeSeconds: 7 * 24 * 60 * 60,
-        },
-      },
-    },
-    {
-      urlPattern: /\.(?:jpg|jpeg|gif|png|svg|ico|webp)$/i,
-      handler: 'StaleWhileRevalidate',
-      options: {
-        cacheName: 'static-image-assets',
-        expiration: {
-          maxEntries: 64,
-          maxAgeSeconds: 24 * 60 * 60,
         },
       },
     },
