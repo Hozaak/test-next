@@ -1,0 +1,65 @@
+{
+  "name": "InternAdda - India's Largest Internship Ecosystem",
+  "short_name": "InternAdda",
+  "description": "Find verified tech internships with premium stipends. 10,000+ students placed.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0052CC",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-icon-180.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "apple touch icon"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot-desktop.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "InternAdda Homepage"
+    },
+    {
+      "src": "/screenshot-mobile.png",
+      "sizes": "750x1334",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "InternAdda Mobile View"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Browse Internships",
+      "short_name": "Internships",
+      "description": "View all available internships",
+      "url": "/internships",
+      "icons": [{ "src": "/shortcut-icon.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Practice Mode",
+      "short_name": "Practice",
+      "description": "Take skill assessments",
+      "url": "/practice",
+      "icons": [{ "src": "/shortcut-icon.png", "sizes": "96x96" }]
+    }
+  ],
+  "categories": ["education", "career", "technology"],
+  "lang": "en-IN",
+  "dir": "ltr"
+}
