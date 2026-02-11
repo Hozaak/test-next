@@ -81,7 +81,7 @@ export default function Home() {
   const scrollRecognition = (direction: 'left' | 'right') => {
     if (recognitionRef.current) {
       const { scrollLeft, clientWidth } = recognitionRef.current;
-      const scrollAmount = direction === 'left' ? -clientWidth / 2 : clientWidth / 2;
+      const scrollAmount = direction === 'left' ? -clientWidth / 1.5 : clientWidth / 1.5;
       recognitionRef.current.scrollTo({ left: scrollLeft + scrollAmount, behavior: 'smooth' });
     }
   };
@@ -101,7 +101,6 @@ export default function Home() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6 }}
               >
-                {/* 1. Updated MSME Badge: Light Green Theme */}
                 <Badge className="bg-green-100/80 hover:bg-green-100 text-green-700 border-green-200 px-4 py-1.5 rounded-full font-semibold shadow-sm text-xs sm:text-sm">
                   <CheckCircle size={14} className="mr-2 inline" />
                   MSME Registered: UDYAM-MH-08-XXXXXXXX
@@ -132,19 +131,18 @@ export default function Home() {
                 </div>
               </motion.div>
 
-              {/* 4. Optimized Right Visual Slider */}
+              {/* Right Visual Slider */}
               <div className="relative w-full aspect-[4/3] lg:aspect-auto lg:h-[450px] rounded-2xl overflow-hidden shadow-xl border-[6px] border-white">
                 <div 
                   className="flex transition-transform duration-700 ease-in-out h-full w-full"
                   style={{ transform: `translateX(-${slideIndex * 100}%)` }}
                 >
-                  {collaborationSlides.map((src, i) => (
+                  {collaborationSlides.map((src) => (
                     <div key={src} className="min-w-full h-full">
                       <img src={src} alt="Project" className="w-full h-full object-cover" />
                     </div>
                   ))}
                 </div>
-                {/* Slider Progress Dots */}
                 <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-1.5">
                   {collaborationSlides.map((_, i) => (
                     <div 
@@ -158,38 +156,46 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 3. Global Recognition Section (Replacing Trust Section) */}
-        <section className="py-16 bg-white overflow-hidden">
+        {/* Global Recognition Slider Section */}
+        <section className="py-20 bg-white overflow-hidden border-t border-slate-100">
           <div className="max-w-7xl mx-auto px-4">
-            <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+            <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
               <div className="space-y-2">
-                <h2 className="text-3xl font-black text-slate-900 flex items-center gap-3">
+                <h2 className="text-3xl sm:text-4xl font-black text-slate-900 flex items-center gap-3">
                   <Globe className="text-blue-600" /> Global Recognition
                 </h2>
-                <p className="text-slate-500">Trusted by the industry's most influential platforms</p>
+                <p className="text-slate-500 text-lg">Trusted by the industry's most influential platforms</p>
               </div>
-              <div className="flex gap-2">
-                <button onClick={() => scrollRecognition('left')} className="p-3 rounded-full border border-slate-200 hover:bg-slate-50 transition-colors">
-                  <ChevronLeft size={20} />
+              <div className="flex gap-3">
+                <button 
+                  onClick={() => scrollRecognition('left')} 
+                  className="p-3 rounded-full border border-slate-200 hover:bg-slate-50 hover:border-blue-600 text-slate-600 hover:text-blue-600 transition-all shadow-sm"
+                  aria-label="Previous logo"
+                >
+                  <ChevronLeft size={24} />
                 </button>
-                <button onClick={() => scrollRecognition('right')} className="p-3 rounded-full border border-slate-200 hover:bg-slate-50 transition-colors">
-                  <ChevronRight size={20} />
+                <button 
+                  onClick={() => scrollRecognition('right')} 
+                  className="p-3 rounded-full border border-slate-200 hover:bg-slate-50 hover:border-blue-600 text-slate-600 hover:text-blue-600 transition-all shadow-sm"
+                  aria-label="Next logo"
+                >
+                  <ChevronRight size={24} />
                 </button>
               </div>
             </div>
             
             <div 
               ref={recognitionRef}
-              className="flex gap-6 overflow-x-auto no-scrollbar pb-4 snap-x snap-mandatory"
+              className="flex gap-6 overflow-x-auto no-scrollbar pb-6 snap-x snap-mandatory"
             >
               {globalRecognition.map((item, i) => (
-                <div key={i} className="min-w-[240px] md:min-w-[280px] group snap-center">
-                  <div className="bg-slate-50 rounded-2xl border border-slate-100 p-8 h-40 flex items-center justify-center grayscale group-hover:grayscale-0 transition-all duration-300">
+                <div key={i} className="min-w-[260px] md:min-w-[300px] group snap-center">
+                  <div className="bg-slate-50/80 rounded-3xl border border-slate-100 p-10 h-44 flex items-center justify-center grayscale group-hover:grayscale-0 transition-all duration-500 shadow-sm hover:shadow-md hover:bg-white">
                     <img src={item.logo} alt={item.name} className="max-w-full max-h-full object-contain" />
                   </div>
-                  <div className="mt-4 px-2">
-                    <h4 className="font-bold text-slate-900">{item.name}</h4>
-                    <p className="text-xs text-slate-500">{item.desc}</p>
+                  <div className="mt-5 px-3">
+                    <h4 className="font-bold text-slate-900 text-lg">{item.name}</h4>
+                    <p className="text-sm text-slate-500 font-medium">{item.desc}</p>
                   </div>
                 </div>
               ))}
@@ -197,7 +203,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 2. Premium Internships Section - Balanced Sizing */}
+        {/* Featured Opportunities Section */}
         <section className="py-20 bg-[#F8FAFC]">
           <div className="max-w-7xl mx-auto px-4">
             <div className="text-center mb-16 space-y-3">
@@ -222,52 +228,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Expert Mentorship Trust Section */}
-        <section className="py-20 bg-white border-t border-slate-100">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="grid lg:grid-cols-2 gap-16 items-center">
-              <div className="space-y-8">
-                <h2 className="text-3xl sm:text-4xl font-black text-slate-900 leading-tight">
-                  Empowering Your <span className="text-blue-600">Growth Path.</span>
-                </h2>
-                <div className="space-y-6">
-                  {[
-                    { icon: Shield, title: "Verified Employer Audit", desc: "Every company is vetted through MSME records before listing." },
-                    { icon: Zap, title: "Zero Middlemen", desc: "Direct interview routing to the HR decision-makers." },
-                    { icon: Award, title: "Industry Certificates", desc: "Digital certificates recognized by 150+ global companies." }
-                  ].map((item, i) => (
-                    <div key={i} className="flex gap-6 p-6 bg-slate-50/50 rounded-2xl border border-slate-100 group hover:bg-white hover:shadow-md transition-all">
-                      <div className="w-14 h-14 bg-blue-600 rounded-xl flex items-center justify-center text-white shrink-0 shadow-lg shadow-blue-200">
-                        <item.icon size={28} />
-                      </div>
-                      <div>
-                        <h4 className="font-bold text-slate-900 text-lg">{item.title}</h4>
-                        <p className="text-slate-500 text-sm leading-relaxed">{item.desc}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* New Mentorship Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {[
-                  { icon: GraduationCap, title: "Career Coaching", desc: "1-on-1 resume reviews and mock interviews." },
-                  { icon: BookOpen, title: "Skill Workshops", desc: "Hands-on projects with React & Python." },
-                  { icon: Users, title: "Alumni Network", desc: "Connect with 7,000+ placed students." },
-                  { icon: Award, title: "Pre-Placement", desc: "Get high-paying jobs via internships." }
-                ].map((item, i) => (
-                  <div key={i} className="bg-blue-600 rounded-2xl p-6 text-white text-center flex flex-col items-center gap-3">
-                    <item.icon size={32} className="text-blue-100" />
-                    <h5 className="font-bold">{item.title}</h5>
-                    <p className="text-xs text-blue-100">{item.desc}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* Final CTA Section */}
         <section className="py-20 bg-white border-t border-slate-100">
           <div className="max-w-4xl mx-auto text-center px-4 space-y-10">
@@ -275,10 +235,10 @@ export default function Home() {
               Ready to Launch Your <span className="text-blue-600">Career?</span>
             </h2>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-12 py-7 rounded-xl text-lg">
+              <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-12 py-7 rounded-xl text-lg shadow-lg">
                 APPLY FOR INTERNSHIPS
               </Button>
-              <Button size="lg" variant="outline" className="border-2 border-slate-900 text-slate-900 font-bold px-12 py-7 rounded-xl text-lg">
+              <Button size="lg" variant="outline" className="border-2 border-slate-900 text-slate-900 font-bold px-12 py-7 rounded-xl text-lg transition-all hover:bg-slate-50">
                 PARTNER WITH US
               </Button>
             </div>
