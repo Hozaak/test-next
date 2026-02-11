@@ -58,11 +58,11 @@ const featuredInternships = [
     skills: ['Python', 'Pandas'],
     applicants: 130,
     isRecommended: true,
-    image: '/python.jpg'
+    image: '/datascience.jpg'
   },
 ]
 
-const collaborationSlides = ['/slide1.jpg', '/slide2.jpg', '/slide3.jpg', '/slide4.jpg'];
+const collaborationSlides = ['/slide1.jpg', '/slide2.jpg', '/slide3.jpg', '/slide4.jpg' , '/slide5.jpg', '/slide6.jpg'];
 
 export default function Home() {
   const [slideIndex, setSlideIndex] = useState(0)
