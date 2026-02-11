@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import {
@@ -9,10 +9,7 @@ import {
   ArrowRight,
   Award,
   Briefcase,
-  Zap,
-  Globe,
   Clock,
-  FileCheck,
   LayoutGrid,
 } from 'lucide-react'
 
@@ -21,15 +18,29 @@ import { Footer } from '@/components/Footer'
 import { InternshipCard } from '@/components/InternshipCard'
 import { Button } from '@/components/ui/button'
 
-// ⚠ Replace with your actual data
 import { MOCK_INTERNSHIPS, CATEGORIES } from '@/constants'
 
 const Home = () => {
-  const [selectedCategory, setSelectedCategory] = useState('All Internships')
-  const [currentSlide, setCurrentSlide] = useState(0)
-  const [imagesLoaded, setImagesLoaded] = useState<boolean[]>(Array(6).fill(false))
+  const safeInternships = Array.isArray(MOCK_INTERNSHIPS)
+    ? MOCK_INTERNSHIPS
+    : []
 
-  const displayedInternships = MOCK_INTERNSHIPS.slice(0, 3)
+  const safeCategories = Array.isArray(CATEGORIES)
+    ? CATEGORIES
+    : []
+
+  const [selectedCategory, setSelectedCategory] = useState(
+    safeCategories[0] || 'All Internships'
+  )
+  const [currentSlide, setCurrentSlide] = useState(0)
+  const [imagesLoaded, setImagesLoaded] = useState<boolean[]>(
+    Array(6).fill(false)
+  )
+
+  const displayedInternships = useMemo(
+    () => safeInternships.slice(0, 3),
+    [safeInternships]
+  )
 
   const sliderImages = [
     '/slide1.jpg',
@@ -48,30 +59,34 @@ const Home = () => {
     }, 4000)
 
     return () => clearInterval(timer)
-  }, [sliderImages.length])
+  }, [])
 
   useEffect(() => {
-    window.scrollTo(0, 0)
+    if (typeof window !== 'undefined') {
+      window.scrollTo(0, 0)
+    }
   }, [])
 
   const filteredInternships =
     selectedCategory === 'All Internships'
       ? displayedInternships
       : displayedInternships.filter(
-          (i: any) => i.category === selectedCategory
+          (i: any) => i?.category === selectedCategory
         )
 
   const handleImageLoad = (index: number) => {
-    const newLoaded = [...imagesLoaded]
-    newLoaded[index] = true
-    setImagesLoaded(newLoaded)
+    setImagesLoaded((prev) => {
+      const updated = [...prev]
+      updated[index] = true
+      return updated
+    })
   }
 
   return (
     <div className="bg-[#F8FAFC] min-h-screen">
       <Header />
 
-      {/* ================= HERO SECTION ================= */}
+      {/* HERO */}
       <section className="relative pt-12 pb-20 bg-white border-b border-slate-200">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -79,7 +94,7 @@ const Home = () => {
             <div className="text-center lg:text-left">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-emerald-50 border border-emerald-100 text-emerald-700 font-bold text-xs mb-6 uppercase tracking-wider">
                 <CheckCircle2 size={14} />
-                MSME Registered: UDYAM-MH-08-XXXXXXXX
+                MSME Registered
               </div>
 
               <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 leading-[1.1] mb-6">
@@ -90,13 +105,13 @@ const Home = () => {
               </h1>
 
               <p className="text-base text-slate-500 max-w-lg mb-8 leading-relaxed mx-auto lg:mx-0">
-                Skip the generic job boards. Access a streamlined pipeline of verified corporate partners.
-                Focus on skill-based hiring with transparent stipends and direct interviews.
+                Access verified companies. Transparent stipends.
+                Direct interview pipelines.
               </p>
 
               <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
                 <Link href="/internships">
-                  <Button className="px-6 py-3 bg-indigo-600 text-white rounded-lg font-bold text-sm hover:bg-indigo-700 transition-all flex items-center gap-2 shadow-sm">
+                  <Button className="px-6 py-3 bg-indigo-600 text-white rounded-lg font-bold text-sm hover:bg-indigo-700 flex items-center gap-2">
                     Find Internships <ArrowRight size={16} />
                   </Button>
                 </Link>
@@ -104,25 +119,11 @@ const Home = () => {
                 <Link href="/tests">
                   <Button
                     variant="outline"
-                    className="px-6 py-3 font-bold text-sm rounded-lg border border-slate-300 hover:bg-slate-50"
+                    className="px-6 py-3 font-bold text-sm rounded-lg border border-slate-300"
                   >
                     Practice Mode
                   </Button>
                 </Link>
-              </div>
-
-              <div className="mt-8 flex flex-col items-center lg:items-start gap-4 text-slate-400">
-                <div className="flex -space-x-2">
-                  {[1, 2, 3, 4].map((i) => (
-                    <div
-                      key={i}
-                      className="w-10 h-10 rounded-full border-2 border-white bg-slate-200 shadow-sm"
-                    />
-                  ))}
-                </div>
-                <p className="text-xs font-semibold uppercase tracking-widest">
-                  7,000+ Students Placed
-                </p>
               </div>
             </div>
 
@@ -135,34 +136,23 @@ const Home = () => {
                     key={currentSlide}
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 1.05 }}
+                    exit={{ opacity: 0 }}
                     transition={{ duration: 0.5 }}
                     className="w-full h-full"
                   >
                     <img
-                      src={sliderImages[currentSlide]}
+                      src={sliderImages[currentSlide] || ''}
                       className="w-full h-full object-cover"
                       onLoad={() => handleImageLoad(currentSlide)}
                       style={{
-                        display: imagesLoaded[currentSlide] ? 'block' : 'none',
+                        display: imagesLoaded[currentSlide]
+                          ? 'block'
+                          : 'none',
                       }}
+                      alt="Slide"
                     />
                   </motion.div>
                 </AnimatePresence>
-
-                <div className="absolute bottom-4 right-4 flex gap-1.5">
-                  {sliderImages.map((_, i) => (
-                    <button
-                      key={i}
-                      onClick={() => setCurrentSlide(i)}
-                      className={`w-2 h-2 rounded-full transition-all ${
-                        currentSlide === i
-                          ? 'bg-white w-6'
-                          : 'bg-white/50'
-                      }`}
-                    />
-                  ))}
-                </div>
               </div>
             </div>
 
@@ -170,7 +160,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ================= INDUSTRY METRICS ================= */}
+      {/* METRICS */}
       <div className="bg-white border-b border-slate-200">
         <div className="container mx-auto px-4 py-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
@@ -198,27 +188,22 @@ const Home = () => {
         </div>
       </div>
 
-      {/* ================= FEATURED INTERNSHIPS ================= */}
+      {/* FEATURED */}
       <section className="py-16 container mx-auto px-4">
         <div className="flex flex-col md:flex-row justify-between items-center mb-10 gap-6">
-          <div className="text-center md:text-left">
-            <h2 className="text-2xl font-bold text-slate-900">
-              Featured Opportunities
-            </h2>
-            <p className="text-sm text-slate-500">
-              Top internships this week • View all for more
-            </p>
-          </div>
+          <h2 className="text-2xl font-bold text-slate-900">
+            Featured Opportunities
+          </h2>
 
           <div className="flex flex-wrap gap-2 justify-center">
-            {CATEGORIES.slice(0, 4).map((cat: string) => (
+            {safeCategories.slice(0, 4).map((cat: string) => (
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all border ${
+                className={`px-4 py-1.5 rounded-full text-xs font-bold border ${
                   selectedCategory === cat
                     ? 'bg-slate-900 text-white border-slate-900'
-                    : 'bg-white text-slate-500 border-slate-200 hover:border-slate-400'
+                    : 'bg-white text-slate-500 border-slate-200'
                 }`}
               >
                 {cat}
@@ -228,19 +213,24 @@ const Home = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredInternships.map((internship: any) => (
-            <InternshipCard key={internship.id} internship={internship} />
-          ))}
+          {filteredInternships.map((internship: any) =>
+            internship ? (
+              <InternshipCard
+                key={internship.id}
+                internship={internship}
+              />
+            ) : null
+          )}
         </div>
 
         <div className="mt-12 flex justify-center">
           <Link href="/internships">
             <Button
               variant="outline"
-              className="group flex items-center gap-2 px-8 py-3 border border-slate-200 text-slate-900 rounded-lg font-bold text-sm hover:bg-slate-50"
+              className="flex items-center gap-2 px-8 py-3 border border-slate-200 text-slate-900 rounded-lg font-bold text-sm"
             >
               <LayoutGrid size={16} className="text-indigo-600" />
-              View All Internships ({MOCK_INTERNSHIPS.length})
+              View All Internships ({safeInternships.length})
               <ArrowRight size={16} />
             </Button>
           </Link>
